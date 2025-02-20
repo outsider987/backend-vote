@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_USER: voting_user
+      MYSQL_PASSWORD: voting_pass
+      MYSQL_DATABASE: voting_db
+      MYSQL_ROOT_PASSWORD: root_password  # Required for MySQL
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d  # Mount init SQL files
+
+volumes:
+  mysql_data:
