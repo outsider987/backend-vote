@@ -70,6 +70,24 @@ async def generate_ticket(event_id: str, db: Session = Depends(get_db)):
     return JSONResponse({"vote_code": vote_code})
 
 
+@app.post("/api/toggle-voting")
+async def toggle_voting(event_id: str, start_voting: bool, db: Session = Depends(get_db)):
+    """
+    控制投票狀態：
+    - event_id: 活動ID
+    - start_voting: True 開始投票，False 停止投票
+    """
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        return JSONResponse({"message": "活動不存在"}, status_code=400)
+    
+    event.is_voting_started = start_voting
+    db.commit()
+    
+    status = "開始" if start_voting else "停止"
+    return JSONResponse({"message": f"投票已{status}"})
+
+
 @app.post("/api/vote")
 async def submit_vote(
     vote_code: str = Form(...),
@@ -90,6 +108,11 @@ async def submit_vote(
         return JSONResponse({"message": "票券無效"}, status_code=400)
     if ticket.used:
         return JSONResponse({"message": "票券已使用"}, status_code=400)
+
+    # 檢查投票是否開始
+    event = db.query(Event).filter(Event.id == ticket.event_id).first()
+    if not event.is_voting_started:
+        return JSONResponse({"message": "投票尚未開始"}, status_code=400)
 
     # 更新票券狀態
     ticket.used = True

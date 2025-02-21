@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS events (
   options JSON NOT NULL,
   votes_per_user INT NOT NULL,
   show_count INT NOT NULL,
+  is_voting_started BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
