@@ -1,0 +1,21 @@
+.
+├── app
+│   ├── __init__.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   └── endpoints
+│   │       ├── __init__.py
+│   │       └── vote.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   └── config.py
+│   ├── db
+│   │   ├── __init__.py
+│   │   └── database.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   └── models.py
+│   └── schemas
+│       ├── __init__.py
+│       └── vote.py
+└── main.py 
