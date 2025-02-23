@@ -12,7 +12,7 @@ current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(current_dir)
 
 from app.core.config import settings
-from models import Base  # Import your SQLAlchemy models
+from app.models.models import Base  # Import your SQLAlchemy models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

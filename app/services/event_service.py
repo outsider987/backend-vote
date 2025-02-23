@@ -43,4 +43,32 @@ class EventService:
         
         event.is_voting_started = start_voting
         db.commit()
-        return event 
+        return event
+
+    @staticmethod
+    def get_events(db: Session) -> list[Event]:
+        try:
+            events = db.query(Event).all()
+            return events
+        except Exception as e:
+            logger.error(f"Failed to fetch events: {str(e)}")
+            raise VotingError(
+                status_code=500,
+                message="Failed to fetch events",
+                error_code="EVENT_FETCH_FAILED",
+                details={"error": str(e)}
+            ) 
+
+    @staticmethod
+    def delete_event(db: Session, event_id: str) -> None:
+        event = db.query(Event).filter(Event.id == event_id).first()
+        if not event:
+            raise VotingError(
+                status_code=404,
+                message="活動不存在",
+                error_code=ErrorCodes.EVENT_NOT_FOUND
+            )
+        db.delete(event)
+        db.commit()
+        return event
+    

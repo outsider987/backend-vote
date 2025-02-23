@@ -1,8 +1,9 @@
-from sqlalchemy import Column, String, Date, Integer, Boolean, JSON, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, String, Date, Integer, Boolean, JSON, ForeignKey, TIMESTAMP, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.database import Base
 from uuid import uuid4
+from datetime import datetime
 
 class Event(Base):
     __tablename__ = "events"
@@ -28,7 +29,7 @@ class Ticket(Base):
     vote_code = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
     event_id = Column(String(36), ForeignKey("events.id", ondelete="CASCADE"), nullable=False)
     used = Column(Boolean, default=False)
-    created_at = Column(TIMESTAMP, server_default=func.now())
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     event = relationship("Event", back_populates="tickets")
     votes = relationship("Vote", back_populates="ticket", cascade="all, delete-orphan")
